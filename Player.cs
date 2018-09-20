@@ -48,6 +48,23 @@ public class Player : MonoBehaviour
             playerAnimator.SetBool("isWalk", true);
             moveVelocity = Vector3.right;
         }
+        if(Input.GetKey(KeyCode.S))
+        {
+            playerAnimator.SetBool("isCrouch", true);
+            moveVelocity = Vector3.zero;
+        }
+        if(Input.GetKeyUp(KeyCode.S))
+        {
+            playerAnimator.SetBool("isCrouch", false);
+        }
+        if(Input.GetKey(KeyCode.W))
+        {
+            playerAnimator.SetBool("isUpside", true);
+        }
+        if(Input.GetKeyUp(KeyCode.W))
+        {
+            playerAnimator.SetBool("isUpside", false);
+        }
         
         transform.position += moveVelocity * speed * Time.deltaTime;
     }
