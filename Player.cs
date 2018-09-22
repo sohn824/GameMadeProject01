@@ -89,7 +89,20 @@ public class Player : MonoBehaviour
                 playerRigid.AddForce(Vector3.up * jumpPower, ForceMode2D.Impulse);
             }
         }
+        if(Input.GetKeyDown(KeyCode.J))
+        {
+            playerAnimator.SetBool("isShoot", true);
+        }
         
         transform.position += moveVelocity * speed * Time.deltaTime;
+    }
+
+    public void ShootBullet() //Animation Event용 함수
+    {
+        
+    }
+    public void SetPlayerIdle() //Animation Event용 함수
+    {
+        playerAnimator.SetBool("isShoot", false);
     }
 }
