@@ -8,10 +8,12 @@ public class Player : MonoBehaviour
     Rigidbody2D playerRigid;
     Animator playerAnimator;
     private float speed = 3.0f;
+    private float crouchSpeed = 1.5f;
     private Vector3 movement;
     private Vector3 moveVelocity;
     private bool isWalk = false;
     private bool isJump = false;
+    private bool isCrouch = false;
     private float jumpPower = 6.0f;
 	// Use this for initialization
 	void Start ()
@@ -66,11 +68,27 @@ public class Player : MonoBehaviour
         if(Input.GetKey(KeyCode.S))
         {
             playerAnimator.SetBool("isCrouch", true);
+            isCrouch = true;
             moveVelocity = Vector3.zero;
+            if (Input.GetKey(KeyCode.A))
+            {
+                playerSprite.flipX = false;
+                playerAnimator.SetBool("isWalk", true);
+                isWalk = true;
+                moveVelocity = Vector3.left;
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                playerSprite.flipX = true;
+                playerAnimator.SetBool("isWalk", true);
+                isWalk = true;
+                moveVelocity = Vector3.right;
+            }
         }
         if(Input.GetKeyUp(KeyCode.S))
         {
             playerAnimator.SetBool("isCrouch", false);
+            isCrouch = false;
         }
         if(Input.GetKey(KeyCode.W))
         {
@@ -93,8 +111,10 @@ public class Player : MonoBehaviour
         {
             playerAnimator.SetBool("isShoot", true);
         }
-        
-        transform.position += moveVelocity * speed * Time.deltaTime;
+        if (!isCrouch)
+            transform.position += moveVelocity * speed * Time.deltaTime;
+        else
+            transform.position += moveVelocity * crouchSpeed * Time.deltaTime;
     }
 
     public void ShootBullet() //Animation Event용 함수
