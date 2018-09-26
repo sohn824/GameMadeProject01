@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    SpriteRenderer playerSprite;
+    [HideInInspector]
+    public SpriteRenderer playerSprite;
     Rigidbody2D playerRigid;
     Animator playerAnimator;
     private float speed = 3.0f;
     private float crouchSpeed = 1.5f;
     private Vector3 movement;
     private Vector3 moveVelocity;
-    private bool isWalk = false;
     private bool isJump = false;
     private bool isCrouch = false;
     private float jumpPower = 6.0f;
+    [SerializeField]
+    private GameObject bullet;
+    [SerializeField]
+    private Transform bulletTf;
+    [SerializeField]
+    private Transform crouchBulletTf;
 	// Use this for initialization
 	void Start ()
     {
@@ -49,20 +55,17 @@ public class Player : MonoBehaviour
         if(moveVelocity == Vector3.zero)
         {
             playerAnimator.SetBool("isWalk", false);
-            isWalk = false;
         }
         if(Input.GetKey(KeyCode.A))
         {
             playerSprite.flipX = false;
             playerAnimator.SetBool("isWalk", true);
-            isWalk = true;
             moveVelocity = Vector3.left;
         }
         if(Input.GetKey(KeyCode.D))
         {
             playerSprite.flipX = true;
             playerAnimator.SetBool("isWalk", true);
-            isWalk = true;
             moveVelocity = Vector3.right;
         }
         if(Input.GetKey(KeyCode.S))
@@ -74,14 +77,12 @@ public class Player : MonoBehaviour
             {
                 playerSprite.flipX = false;
                 playerAnimator.SetBool("isWalk", true);
-                isWalk = true;
                 moveVelocity = Vector3.left;
             }
             if (Input.GetKey(KeyCode.D))
             {
                 playerSprite.flipX = true;
                 playerAnimator.SetBool("isWalk", true);
-                isWalk = true;
                 moveVelocity = Vector3.right;
             }
         }
@@ -112,14 +113,25 @@ public class Player : MonoBehaviour
             playerAnimator.SetBool("isShoot", true);
         }
         if (!isCrouch)
+        {
             transform.position += moveVelocity * speed * Time.deltaTime;
+        }
         else
+        {
             transform.position += moveVelocity * crouchSpeed * Time.deltaTime;
+        }
     }
 
     public void ShootBullet() //Animation Event용 함수
     {
-        
+        if (isCrouch)
+        {
+            Instantiate(bullet, crouchBulletTf.position, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(bullet, bulletTf.position, Quaternion.identity);
+        }
     }
     public void SetPlayerIdle() //Animation Event용 함수
     {
