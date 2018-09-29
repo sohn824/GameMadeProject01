@@ -12,13 +12,6 @@ public class Bullet : MonoBehaviour
     void Start ()
     {
         playerSprite = GameObject.Find("Player").GetComponent<SpriteRenderer>();
-        Invoke("destroySelf", 2.5f);
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        transform.position += moveVelocity * speed * Time.deltaTime;
         if (playerSprite.flipX == false)
         {
             moveVelocity = Vector3.left;
@@ -27,6 +20,13 @@ public class Bullet : MonoBehaviour
         {
             moveVelocity = Vector3.right;
         }
+        Invoke("destroySelf", 2.5f);
+	}
+	
+	// Update is called once per frame
+	void Update ()
+    {
+        transform.position += moveVelocity * speed * Time.deltaTime;
     }
 
     void destroySelf()
