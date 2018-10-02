@@ -8,6 +8,13 @@ public class Bullet : MonoBehaviour
     private Vector3 moveVelocity;
     private float speed = 8.0f;
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy")
+        {
+            destroySelf();
+        }
+    }
     // Use this for initialization
     void Start ()
     {
