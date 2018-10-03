@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Mummy : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject AttackEffect;
+    [SerializeField]
+    private Transform LeftAttackTf;
     private Transform targetTf;
     private SpriteRenderer mummySprite;
     private Animator mummyAnimator;
@@ -20,7 +24,9 @@ public class Mummy : MonoBehaviour
     public enum EnemyState
     {
         Idle,
-        Walk
+        Walk,
+        Attack,
+        Die
     }
     [HideInInspector]
     public EnemyState enemyState;
@@ -42,9 +48,8 @@ public class Mummy : MonoBehaviour
     {
 		if(mummyLife <= 0)
         {
-            Destroy(gameObject);
+            SetState(EnemyState.Die);
         }
-
     }
 
     public void SetState(EnemyState newState)
@@ -105,5 +110,45 @@ public class Mummy : MonoBehaviour
 
         } while (!isNewState);
         mummyAnimator.SetBool("isWalk", false);
+    }
+
+    IEnumerator Attack()
+    {
+        mummyAnimator.SetBool("isAttack", true);
+        do
+        {
+            if(targetTf.position.x < transform.position.x)
+            {
+                mummySprite.flipX = false; //이거 스프라이트가 공격만 반대쪽으로 되어 있어서 flipX를 공격때는 반대로 시켰음
+            }
+            else
+            {
+                mummySprite.flipX = true;
+            }
+            yield return null;
+        } while (!isNewState);
+        mummyAnimator.SetBool("isAttack", false);
+    }
+
+    IEnumerator Die()
+    {
+        mummyAnimator.SetBool("isDie", true);
+        do
+        {
+            yield return null;
+        } while (!isNewState);
+    }
+
+    public void DestroySelf() //죽는 애니메이션 이벤트용
+    {
+        Destroy(gameObject);
+    }
+
+    public void InstantiateAttackEffect() //공격 이펙트 (애니메이션 이벤트)
+    {
+        if(targetTf.position.x < transform.position.x)
+        {
+            Instantiate(AttackEffect, LeftAttackTf.position, Quaternion.identity);
+        }
     }
 }
