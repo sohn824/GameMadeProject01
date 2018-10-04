@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -15,12 +16,17 @@ public class Player : MonoBehaviour
     private bool isJump = false;
     private bool isCrouch = false;
     private float jumpPower = 6.0f;
+    private int playerHP = 5;
     [SerializeField]
     private GameObject bullet;
     [SerializeField]
-    private Transform bulletTf;
+    private Transform leftBulletTf;
     [SerializeField]
-    private Transform crouchBulletTf;
+    private Transform rightBulletTf;
+    [SerializeField]
+    private Transform leftCrouchBulletTf;
+    [SerializeField]
+    private Transform rightCrouchBulletTf;
 	// Use this for initialization
 	void Start ()
     {
@@ -32,7 +38,10 @@ public class Player : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-
+        if(playerHP <= 0)
+        {
+            playerAnimator.SetBool("isDie", true);
+        }
 	}
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -41,6 +50,15 @@ public class Player : MonoBehaviour
         {
             playerAnimator.SetBool("isJump", false);
             isJump = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Enemy")
+        {
+            playerAnimator.SetBool("isDamaged", true);
+            playerHP--;
         }
     }
 
@@ -124,17 +142,41 @@ public class Player : MonoBehaviour
 
     public void ShootBullet() //Animation Event용 함수
     {
-        if (isCrouch)
+        if(playerSprite.flipX == true)
         {
-            Instantiate(bullet, crouchBulletTf.position, Quaternion.identity);
+            if (!isCrouch)
+            {
+                Instantiate(bullet, rightBulletTf.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(bullet, rightCrouchBulletTf.position, Quaternion.identity);
+            }
         }
         else
         {
-            Instantiate(bullet, bulletTf.position, Quaternion.identity);
+            if(!isCrouch)
+            {
+                Instantiate(bullet, leftBulletTf.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(bullet, leftCrouchBulletTf.position, Quaternion.identity);
+            }
         }
     }
     public void SetPlayerIdle() //Animation Event용 함수
     {
+        playerAnimator.SetBool("isDamaged", false);
         playerAnimator.SetBool("isShoot", false);
+    }
+
+    public void FlipSprite() //죽는 애니메이션 스프라이트가 반대로 되어있어서 죽는 애니메이션 처음에 호출해서 뒤집으려고 만든 함수
+    {
+        playerSprite.flipX = !playerSprite.flipX;
+    }
+    public void GoToDeathScene() //죽는 애니메이션 끝나면 데스 씬 가는 이벤트
+    {
+        SceneManager.LoadScene("DeathScene");
     }
 }
