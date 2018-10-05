@@ -7,7 +7,10 @@ public class Mummy : MonoBehaviour
     [SerializeField]
     private GameObject AttackEffect;
     [SerializeField]
-    private Transform LeftAttackTf;
+    private Transform leftAttackTf;
+    [SerializeField]
+    private Transform rightAttackTf;
+    private GameObject newAttackEffect;
     private Transform targetTf;
     private SpriteRenderer mummySprite;
     private Animator mummyAnimator;
@@ -148,7 +151,12 @@ public class Mummy : MonoBehaviour
     {
         if(targetTf.position.x < transform.position.x)
         {
-            Instantiate(AttackEffect, LeftAttackTf.position, Quaternion.identity);
+            newAttackEffect = Instantiate(AttackEffect, leftAttackTf.position, Quaternion.identity);
         }
+        else
+        {
+            newAttackEffect =  Instantiate(AttackEffect, rightAttackTf.position, Quaternion.identity);
+        }
+        newAttackEffect.transform.parent = gameObject.transform;
     }
 }
