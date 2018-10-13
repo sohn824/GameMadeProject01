@@ -4,21 +4,32 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    private Animator bulletAnimator;
     private SpriteRenderer playerSprite;
     private Vector3 moveVelocity;
     private float speed = 8.0f;
+    GameObject player;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag == "Enemy")
         {
-            destroySelf();
+            if (GameObject.Find("Player").GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
+            {
+                DestroySelf();
+            }
+            else if(GameObject.Find("Player").GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
+            {
+                explosion();
+            }
         }
     }
     // Use this for initialization
     void Start ()
     {
-        playerSprite = GameObject.Find("Player").GetComponent<SpriteRenderer>();
+        player = GameObject.Find("Player");
+        playerSprite = player.GetComponent<SpriteRenderer>();
+        bulletAnimator = GetComponent<Animator>();
         if (playerSprite.flipX == false)
         {
             moveVelocity = Vector3.left;
@@ -27,7 +38,7 @@ public class Bullet : MonoBehaviour
         {
             moveVelocity = Vector3.right;
         }
-        Invoke("destroySelf", 2.5f);
+        Invoke("DestroySelf", 2.5f);
 	}
 	
 	// Update is called once per frame
@@ -36,7 +47,12 @@ public class Bullet : MonoBehaviour
         transform.position += moveVelocity * speed * Time.deltaTime;
     }
 
-    void destroySelf()
+    void explosion()
+    {
+        bulletAnimator.SetBool("isExplosion", true);
+    }
+
+    public void DestroySelf()
     {
         Destroy(gameObject);
     }

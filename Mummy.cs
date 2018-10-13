@@ -17,11 +17,19 @@ public class Mummy : MonoBehaviour
     private int mummyLife = 5;
     private float enemySpeed = 1.5f;
     private bool isNewState = false;
+    GameObject player;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Bullet")
+        if (collision.tag == "Bullet")
         {
-            mummyLife--;
+            if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
+            {
+                mummyLife--;
+            }
+            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
+            {
+                mummyLife -= 2;
+            }
         }
     }
     public enum EnemyState
@@ -35,21 +43,22 @@ public class Mummy : MonoBehaviour
     public EnemyState enemyState;
     private void OnEnable()
     {
-        StartCoroutine("FSMMain");  
+        StartCoroutine("FSMMain");
     }
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-        targetTf = GameObject.Find("Player").GetComponent<Transform>();
+        player = GameObject.Find("Player");
+        targetTf = player.GetComponent<Transform>();
         mummySprite = GetComponent<SpriteRenderer>();
         mummyAnimator = GetComponent<Animator>();
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-		if(mummyLife <= 0)
+        if (mummyLife <= 0)
         {
             SetState(EnemyState.Die);
         }
@@ -63,7 +72,7 @@ public class Mummy : MonoBehaviour
 
     IEnumerator FSMMain()
     {
-        while(true)
+        while (true)
         {
             isNewState = false;
             yield return StartCoroutine(enemyState.ToString());
@@ -77,7 +86,7 @@ public class Mummy : MonoBehaviour
         {
             //상태 중 동작
             yield return null;
-            if(isNewState)
+            if (isNewState)
             {
                 break;
             }
@@ -91,7 +100,7 @@ public class Mummy : MonoBehaviour
         do
         {
             Vector3 velocity = Vector3.zero;
-            
+
             if (targetTf.position.x < transform.position.x)
             {
                 mummySprite.flipX = true;
@@ -106,7 +115,7 @@ public class Mummy : MonoBehaviour
             }
             transform.position += velocity * enemySpeed * Time.deltaTime;
             yield return null;
-            if(isNewState)
+            if (isNewState)
             {
                 break;
             }
@@ -120,7 +129,7 @@ public class Mummy : MonoBehaviour
         mummyAnimator.SetBool("isAttack", true);
         do
         {
-            if(targetTf.position.x < transform.position.x)
+            if (targetTf.position.x < transform.position.x)
             {
                 mummySprite.flipX = false; //이거 스프라이트가 공격만 반대쪽으로 되어 있어서 flipX를 공격때는 반대로 시켰음
             }
@@ -144,18 +153,19 @@ public class Mummy : MonoBehaviour
 
     public void DestroySelf() //죽는 애니메이션 이벤트용
     {
+        ScoreManager.instance.AddScore(500);
         Destroy(gameObject);
     }
 
     public void InstantiateAttackEffect() //공격 이펙트 (애니메이션 이벤트)
     {
-        if(targetTf.position.x < transform.position.x)
+        if (targetTf.position.x < transform.position.x)
         {
             newAttackEffect = Instantiate(AttackEffect, leftAttackTf.position, Quaternion.identity);
         }
         else
         {
-            newAttackEffect =  Instantiate(AttackEffect, rightAttackTf.position, Quaternion.identity);
+            newAttackEffect = Instantiate(AttackEffect, rightAttackTf.position, Quaternion.identity);
         }
         newAttackEffect.transform.parent = gameObject.transform;
     }

@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public SpriteRenderer playerSprite;
     Rigidbody2D playerRigid;
     Animator playerAnimator;
+    BoxCollider2D playerCollider;
+    BoxCollider2D crouchCollider;
     private float speed = 3.0f;
     private float crouchSpeed = 1.5f;
     private Vector3 movement;
@@ -21,7 +23,7 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public int playerHPMax = 5;
     [SerializeField]
-    private GameObject bullet;
+    private GameObject[] bullet;
     [SerializeField]
     private Transform leftBulletTf;
     [SerializeField]
@@ -30,12 +32,24 @@ public class Player : MonoBehaviour
     private Transform leftCrouchBulletTf;
     [SerializeField]
     private Transform rightCrouchBulletTf;
+
+    public enum CurrentBullet
+    {
+        Default = 0,
+        RocketLauncher = 1
+    }
+
+    public CurrentBullet currentBullet;
+
 	// Use this for initialization
 	void Start ()
     {
         playerSprite = GetComponent<SpriteRenderer>();
         playerRigid = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
+        playerCollider = GetComponent<BoxCollider2D>();
+        crouchCollider = GameObject.Find("CrouchCollider").GetComponent<BoxCollider2D>();
+        currentBullet = CurrentBullet.Default;
 	}
 	
 	// Update is called once per frame
@@ -94,6 +108,8 @@ public class Player : MonoBehaviour
             playerAnimator.SetBool("isCrouch", true);
             isCrouch = true;
             moveVelocity = Vector3.zero;
+            playerCollider.enabled = false;
+            crouchCollider.enabled = true;
             if (Input.GetKey(KeyCode.A))
             {
                 playerSprite.flipX = false;
@@ -111,6 +127,8 @@ public class Player : MonoBehaviour
         {
             playerAnimator.SetBool("isCrouch", false);
             isCrouch = false;
+            playerCollider.enabled = true;
+            crouchCollider.enabled = false;
         }
         if(Input.GetKey(KeyCode.W))
         {
@@ -149,22 +167,22 @@ public class Player : MonoBehaviour
         {
             if (!isCrouch)
             {
-                Instantiate(bullet, rightBulletTf.position, Quaternion.identity);
+                Instantiate(bullet[(int)currentBullet], rightBulletTf.position, Quaternion.identity);
             }
             else
             {
-                Instantiate(bullet, rightCrouchBulletTf.position, Quaternion.identity);
+                Instantiate(bullet[(int)currentBullet], rightCrouchBulletTf.position, Quaternion.identity);
             }
         }
         else
         {
             if(!isCrouch)
             {
-                Instantiate(bullet, leftBulletTf.position, Quaternion.identity);
+                Instantiate(bullet[(int)currentBullet], leftBulletTf.position, Quaternion.identity);
             }
             else
             {
-                Instantiate(bullet, leftCrouchBulletTf.position, Quaternion.identity);
+                Instantiate(bullet[(int)currentBullet], leftCrouchBulletTf.position, Quaternion.identity);
             }
         }
     }
