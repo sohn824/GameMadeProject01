@@ -10,6 +10,7 @@ public class RocketLauncher : MonoBehaviour
         if(collision.tag == "Player")
         {
             player.GetComponent<Player>().currentBullet = Player.CurrentBullet.RocketLauncher;
+            BulletManager.instance.ChangeBulletImage();
             Destroy(gameObject);
         }
     }
