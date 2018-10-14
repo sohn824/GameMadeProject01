@@ -11,6 +11,7 @@ public class RocketLauncher : MonoBehaviour
         {
             player.GetComponent<Player>().currentBullet = Player.CurrentBullet.RocketLauncher;
             BulletManager.instance.ChangeBulletImage();
+            BulletManager.instance.GetRocketLauncher();
             Destroy(gameObject);
         }
     }

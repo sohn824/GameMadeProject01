@@ -27,5 +27,5 @@ public class ScoreManager : MonoBehaviour
         score += num;
         scoreText.text = "SCORE : " + score.ToString();
     }
-	
+
 }

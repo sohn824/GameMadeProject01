@@ -185,6 +185,7 @@ public class Player : MonoBehaviour
                 Instantiate(bullet[(int)currentBullet], leftCrouchBulletTf.position, Quaternion.identity);
             }
         }
+        BulletManager.instance.RemainAmmo--;
     }
     public void SetPlayerIdle() //Animation Event용 함수
     {

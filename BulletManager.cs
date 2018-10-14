@@ -9,6 +9,10 @@ public class BulletManager : MonoBehaviour
     private Image currentImage; 
     [SerializeField]
     private Sprite[] bulletSprites;
+    private Text remainAmmoText;
+    private string remainAmmoString;
+    public float RemainAmmo;
+    GameObject player;
     void Awake()
     {
         if (!instance)
@@ -18,12 +22,39 @@ public class BulletManager : MonoBehaviour
     }
     void Start()
     {
+        player = GameObject.Find("Player");
         currentImage = GameObject.Find("CurrentBullet").GetComponent<Image>();
+        remainAmmoText = GameObject.Find("RemainAmmo").GetComponent<Text>();
+        remainAmmoString = "INFINITY";
+        RemainAmmo = Mathf.Infinity;
+    }
+    void Update()
+    {
+        remainAmmoString = RemainAmmo.ToString();
+        remainAmmoText.text = "AMMO : " + remainAmmoString;
+        if(RemainAmmo == 0)
+        {
+            player.GetComponent<Player>().currentBullet = Player.CurrentBullet.Default;
+            ChangeBulletImage();
+            BulletInitialize();
+        }
+    }
+    public void BulletInitialize()
+    {
+        RemainAmmo = Mathf.Infinity;
+        remainAmmoString = "INFINITY";
     }
 
     public void ChangeBulletImage()
     {
         currentImage.sprite = bulletSprites[(int)GameObject.Find("Player").GetComponent<Player>().currentBullet];
+    }
+
+    public void GetRocketLauncher() //UI 업데이트용
+    {
+        RemainAmmo = 20;
+        remainAmmoString = RemainAmmo.ToString();
+        remainAmmoText.text = "AMMO : " + remainAmmoString;
     }
 
 }
