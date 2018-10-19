@@ -17,7 +17,7 @@ public class Mummy : MonoBehaviour
     private int mummyLife = 5;
     private float enemySpeed = 1.5f;
     private bool isNewState = false;
-    GameObject player;
+    private GameObject player;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Bullet")
