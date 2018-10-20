@@ -9,8 +9,10 @@ public class MiddleBossSight : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Charge);
-            if(gameObject.transform.parent.GetComponent<MiddleBoss>().middleBossState == MiddleBoss.MiddleBossState.Charge)
+            //TODO : 이 패턴들을 랜덤하게 나오게 할 예정
+            //gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Charge);
+            gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Shoot);
+            if(gameObject.transform.parent.GetComponent<MiddleBoss>().middleBossState == MiddleBoss.MiddleBossState.Charge) //Charge가 걸렸을 경우 방향 정해주는 처리문
             {
                 if(targetTf.position.x < transform.parent.position.x)
                 {

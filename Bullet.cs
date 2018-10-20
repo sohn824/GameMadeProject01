@@ -52,7 +52,7 @@ public class Bullet : MonoBehaviour
         bulletAnimator.SetBool("isExplosion", true);
     }
 
-    public void DestroySelf()
+    public void DestroySelf() //explosion의 애니메이션 이벤트로도 사용
     {
         Destroy(gameObject);
     }
