@@ -52,7 +52,7 @@ public class BulletManager : MonoBehaviour
 
     public void GetRocketLauncher() //UI 업데이트용
     {
-        RemainAmmo = 5;
+        RemainAmmo = 10;
         remainAmmoString = RemainAmmo.ToString();
         remainAmmoText.text = "AMMO : " + remainAmmoString;
     }

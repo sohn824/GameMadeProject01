@@ -9,12 +9,14 @@ public class MiddleBoss : MonoBehaviour
     [SerializeField]
     private GameObject enemyBomb;
     [SerializeField]
+    private GameObject enemyColumn;
+    [SerializeField]
     private Transform leftShootTf;
     [SerializeField]
     private Transform rightShootTf;
     private Animator middleBossAnimator;
     private int middleBossLife = 30;
-    private float chargeSpeed = 10.0f;
+    private float chargeSpeed = 8.0f;
     private bool isNewState = false;
     private GameObject player;
     private Transform targetTf;
@@ -129,6 +131,51 @@ public class MiddleBoss : MonoBehaviour
         middleBossAnimator.SetBool("isShoot", false);
     }
 
+    IEnumerator Smash()
+    {
+        middleBossAnimator.SetBool("isSmash", true);
+        do
+        {
+            if (targetTf.position.x < transform.position.x)
+            {
+                MiddleBossSprite.flipX = true;
+                for (int i = 0; i < 5; i++)
+                {
+                    Instantiate(enemyColumn, new Vector3(leftShootTf.position.x - i, leftShootTf.position.y + 0.9f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+            else
+            {
+                MiddleBossSprite.flipX = false;
+                for (int i = 0; i < 5; i++)
+                {
+                    Instantiate(enemyColumn, new Vector3(rightShootTf.position.x + i, rightShootTf.position.y + 0.9f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
+        } while (!isNewState);
+        middleBossAnimator.SetBool("isSmash", false);
+    }
+
+    IEnumerator Stab()
+    {
+        middleBossAnimator.SetBool("isStab", true);
+        do
+        {
+            if (targetTf.position.x < transform.position.x)
+            {
+                MiddleBossSprite.flipX = true;
+            }
+            else
+            {
+                MiddleBossSprite.flipX = false;
+            }
+            yield return null;
+        } while (!isNewState);
+        middleBossAnimator.SetBool("isStab", false);
+    }
+
     IEnumerator Die()
     {
         middleBossAnimator.SetBool("isDie", true);
@@ -177,11 +224,11 @@ public class MiddleBoss : MonoBehaviour
             case 2:
                 if (targetTf.position.x < transform.position.x)
                 {
-                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x - 1.0f, leftShootTf.position.y, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x - 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
                 }
                 else
                 {
-                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x + 1.0f, leftShootTf.position.y, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x + 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
                 }
                 break;
         }
