@@ -36,7 +36,8 @@ public class Player : MonoBehaviour
     public enum CurrentBullet
     {
         Default = 0,
-        RocketLauncher = 1
+        RocketLauncher = 1,
+        FlameShot = 2
     }
 
     public CurrentBullet currentBullet;

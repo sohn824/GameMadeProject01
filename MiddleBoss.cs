@@ -15,7 +15,6 @@ public class MiddleBoss : MonoBehaviour
     [SerializeField]
     private Transform rightShootTf;
     private Animator middleBossAnimator;
-    private int middleBossLife = 30;
     private float chargeSpeed = 8.0f;
     private bool isNewState = false;
     private GameObject player;
@@ -23,20 +22,27 @@ public class MiddleBoss : MonoBehaviour
     [HideInInspector]
     public SpriteRenderer MiddleBossSprite;
     public Vector3 Velocity;
+    public int MiddleBossHP = 30;
+    public int MiddleBossHPMax = 30;
     int beforeSeed = -1;
     int currentSeed = 0;
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Bullet")
         {
             if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
             {
-                middleBossLife--;
+                MiddleBossHP--;
             }
             else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
             {
-                middleBossLife -= 2;
+                MiddleBossHP -= 2;
             }
+            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.FlameShot)
+            {
+                MiddleBossHP -= 3;
+            }
+            Debug.Log(MiddleBossHP);
         }
     }
     public enum MiddleBossState
@@ -63,9 +69,18 @@ public class MiddleBoss : MonoBehaviour
 	}
 	void Update ()
     {
-		if(middleBossLife <= 0)
+		if(MiddleBossHP <= 0)
         {
             SetState(MiddleBossState.Die);
+        }
+        if(transform.position.x < player.transform.position.x) //Charge로 왼쪽으로 넘어가버리면 다시 오른쪽으로 오게
+        {
+            if(Vector3.Distance(transform.position, player.transform.position) > 7)
+            {
+                MiddleBossSprite.flipX = false;
+                SetState(MiddleBossState.Charge);
+                Velocity = Vector3.right;
+            }
         }
 	}
     public void SetState(MiddleBossState newState)
@@ -126,7 +141,7 @@ public class MiddleBoss : MonoBehaviour
             {
                 MiddleBossSprite.flipX = false;
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.0f);
         } while (!isNewState);
         middleBossAnimator.SetBool("isShoot", false);
     }
@@ -142,7 +157,7 @@ public class MiddleBoss : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     Instantiate(enemyColumn, new Vector3(leftShootTf.position.x - i, leftShootTf.position.y + 0.9f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(0.4f);
                 }
             }
             else
@@ -151,7 +166,7 @@ public class MiddleBoss : MonoBehaviour
                 for (int i = 0; i < 5; i++)
                 {
                     Instantiate(enemyColumn, new Vector3(rightShootTf.position.x + i, rightShootTf.position.y + 0.9f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
-                    yield return new WaitForSeconds(0.5f);
+                    yield return new WaitForSeconds(0.4f);
                 }
             }
         } while (!isNewState);

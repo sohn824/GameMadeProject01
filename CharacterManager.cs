@@ -18,5 +18,5 @@ public class CharacterManager : MonoBehaviour
 	void Update ()
     {
         hpBar.value = (float)player.playerHP / (float)player.playerHPMax;
-	}
+    }
 }

@@ -18,7 +18,7 @@ public class Mummy : MonoBehaviour
     private float enemySpeed = 1.5f;
     private bool isNewState = false;
     private GameObject player;
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Bullet")
         {
@@ -29,6 +29,10 @@ public class Mummy : MonoBehaviour
             else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
             {
                 mummyLife -= 2;
+            }
+            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.FlameShot)
+            {
+                mummyLife -= 3;
             }
         }
     }

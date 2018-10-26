@@ -57,4 +57,11 @@ public class BulletManager : MonoBehaviour
         remainAmmoText.text = "AMMO : " + remainAmmoString;
     }
 
+    public void GetFlameShot()
+    {
+        RemainAmmo = 5;
+        remainAmmoString = RemainAmmo.ToString();
+        remainAmmoText.text = "AMMO : " + remainAmmoString;
+    }
+
 }

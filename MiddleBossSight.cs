@@ -7,6 +7,8 @@ public class MiddleBossSight : MonoBehaviour
     private Transform targetTf;
     private int currentSeed = 1;
     private int beforeSeed = 0;
+    //private IEnumerator randomCoroutine;
+    //private bool coroutineIsRunning = false;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
@@ -71,4 +73,6 @@ public class MiddleBossSight : MonoBehaviour
         }
         beforeSeed = currentSeed;
     }
+
+    
 }
