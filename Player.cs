@@ -202,4 +202,5 @@ public class Player : MonoBehaviour
     {
         SceneManager.LoadScene("DeathScene");
     }
+
 }

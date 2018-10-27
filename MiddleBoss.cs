@@ -16,6 +16,8 @@ public class MiddleBoss : MonoBehaviour
     private Transform leftShootTf;
     [SerializeField]
     private Transform rightShootTf;
+    [SerializeField]
+    private GameObject explosionEffect;
     private Animator middleBossAnimator;
     private float chargeSpeed = 8.0f;
     private bool isNewState = false;
@@ -27,8 +29,10 @@ public class MiddleBoss : MonoBehaviour
     public bool IsAngry = false; //이건 광폭화 시 무적 체크용
     private bool isNotAngry = true; //이건 광폭화 진입 시 한번만 호출되게 하기용
     public Vector3 Velocity;
+    [HideInInspector]
     public int MiddleBossHP = 50;
-    public int MiddleBossHPMax = 30;
+    [HideInInspector]
+    public int MiddleBossHPMax = 50;
     int beforeSeed = -1;
     int currentSeed = 0;
     private void OnTriggerExit2D(Collider2D collision)
@@ -210,8 +214,25 @@ public class MiddleBoss : MonoBehaviour
         Invoke("gatheringEnd", 6.0f);
         do
         {
-
-            yield return null;
+            for(int i=0; i<6; i++)
+            {
+                if(i%2 ==0)
+                {
+                    Instantiate(explosionEffect, new Vector3(leftShootTf.position.x - i, leftShootTf.position.y, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(rightShootTf.position.x + i, rightShootTf.position.y, rightShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(transform.position.x, transform.position.y -(i+1), leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(transform.position.x, transform.position.y +(i+1), leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    yield return new WaitForSeconds(0.5f);
+                }
+                else
+                {
+                    Instantiate(explosionEffect, new Vector3(leftShootTf.position.x - (i-1), transform.position.y - (i+1), leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(rightShootTf.position.x + (i-1), transform.position.y - (i+1), rightShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(leftShootTf.position.x - (i-1), transform.position.y + (i+1), leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    Instantiate(explosionEffect, new Vector3(rightShootTf.position.x + (i-1), transform.position.y + (i+1), rightShootTf.position.z), Quaternion.identity, gameObject.transform);
+                    yield return new WaitForSeconds(0.5f);
+                }
+            }
         } while (!isNewState);
         middleBossAnimator.SetBool("isGathering", false);
         IsAngry = false;
