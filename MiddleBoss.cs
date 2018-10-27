@@ -11,6 +11,8 @@ public class MiddleBoss : MonoBehaviour
     [SerializeField]
     private GameObject enemyColumn;
     [SerializeField]
+    private GameObject enemyShield;
+    [SerializeField]
     private Transform leftShootTf;
     [SerializeField]
     private Transform rightShootTf;
@@ -21,14 +23,17 @@ public class MiddleBoss : MonoBehaviour
     private Transform targetTf;
     [HideInInspector]
     public SpriteRenderer MiddleBossSprite;
+    [HideInInspector]
+    public bool IsAngry = false; //이건 광폭화 시 무적 체크용
+    private bool isNotAngry = true; //이건 광폭화 진입 시 한번만 호출되게 하기용
     public Vector3 Velocity;
-    public int MiddleBossHP = 30;
+    public int MiddleBossHP = 50;
     public int MiddleBossHPMax = 30;
     int beforeSeed = -1;
     int currentSeed = 0;
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Bullet")
+        if (collision.tag == "Bullet" && IsAngry == false)
         {
             if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
             {
@@ -52,6 +57,7 @@ public class MiddleBoss : MonoBehaviour
         Shoot,
         Smash,
         Stab,
+        Gathering,
         Die
     }
     public MiddleBossState middleBossState;
@@ -73,7 +79,7 @@ public class MiddleBoss : MonoBehaviour
         {
             SetState(MiddleBossState.Die);
         }
-        if(transform.position.x < player.transform.position.x) //Charge로 왼쪽으로 넘어가버리면 다시 오른쪽으로 오게
+        if(transform.position.x < player.transform.position.x && IsAngry == false) //Charge로 왼쪽으로 넘어가버리면 다시 오른쪽으로 오게
         {
             if(Vector3.Distance(transform.position, player.transform.position) > 7)
             {
@@ -81,6 +87,11 @@ public class MiddleBoss : MonoBehaviour
                 SetState(MiddleBossState.Charge);
                 Velocity = Vector3.right;
             }
+        }
+        if(MiddleBossHP <= 25 && isNotAngry)
+        {
+            SetState(MiddleBossState.Gathering);
+            isNotAngry = false;
         }
 	}
     public void SetState(MiddleBossState newState)
@@ -191,6 +202,21 @@ public class MiddleBoss : MonoBehaviour
         middleBossAnimator.SetBool("isStab", false);
     }
 
+    IEnumerator Gathering()
+    {
+        middleBossAnimator.SetBool("isGathering", true);
+        IsAngry = true;
+        enemyShield.SetActive(true);
+        Invoke("gatheringEnd", 6.0f);
+        do
+        {
+
+            yield return null;
+        } while (!isNewState);
+        middleBossAnimator.SetBool("isGathering", false);
+        IsAngry = false;
+        enemyShield.SetActive(false);
+    }
     IEnumerator Die()
     {
         middleBossAnimator.SetBool("isDie", true);
@@ -254,5 +280,10 @@ public class MiddleBoss : MonoBehaviour
     {
         ScoreManager.instance.AddScore(5000);
         Destroy(gameObject);
+    }
+
+    private void gatheringEnd() //광폭화 끝내기 함수
+    {
+        SetState(MiddleBossState.Idle);
     }
 }

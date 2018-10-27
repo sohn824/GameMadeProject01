@@ -7,11 +7,10 @@ public class MiddleBossSight : MonoBehaviour
     private Transform targetTf;
     private int currentSeed = 1;
     private int beforeSeed = 0;
-    //private IEnumerator randomCoroutine;
-    //private bool coroutineIsRunning = false;
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && gameObject.transform.parent.GetComponent<MiddleBoss>().IsAngry == false)
         {
             randomPattern();
             if(gameObject.transform.parent.GetComponent<MiddleBoss>().middleBossState == MiddleBoss.MiddleBossState.Charge) //Charge가 걸렸을 경우 방향 정해주는 처리문
@@ -35,7 +34,7 @@ public class MiddleBossSight : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.tag == "Player" && gameObject.transform.parent.GetComponent<MiddleBoss>().IsAngry == false)
         {
             gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Idle);
         }
@@ -48,13 +47,20 @@ public class MiddleBossSight : MonoBehaviour
 
     void randomPattern()
     {
-        while (true)
+        if (gameObject.transform.parent.GetComponent<MiddleBoss>().IsAngry == false)
         {
-            currentSeed = Random.Range(1, 5);
-            if (currentSeed != beforeSeed)
+            while (true)
             {
-                break;
+                currentSeed = Random.Range(1, 5);
+                if (currentSeed != beforeSeed)
+                {
+                    break;
+                }
             }
+        }
+        else //IsAngry 상태면
+        {
+            currentSeed = 5;
         }
         switch(currentSeed)
         {
@@ -69,6 +75,9 @@ public class MiddleBossSight : MonoBehaviour
                 break;
             case 4:
                 gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Stab);
+                break;
+            case 5:
+                gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Gathering);
                 break;
         }
         beforeSeed = currentSeed;
