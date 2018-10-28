@@ -18,6 +18,8 @@ public class MiddleBoss : MonoBehaviour
     private Transform rightShootTf;
     [SerializeField]
     private GameObject explosionEffect;
+    [SerializeField]
+    private GameObject swordSlashEffect;
     private Animator middleBossAnimator;
     private float chargeSpeed = 8.0f;
     private bool isNewState = false;
@@ -196,12 +198,15 @@ public class MiddleBoss : MonoBehaviour
             if (targetTf.position.x < transform.position.x)
             {
                 MiddleBossSprite.flipX = true;
+                Instantiate(swordSlashEffect, leftShootTf.position, Quaternion.identity, gameObject.transform);
+                yield return new WaitForSeconds(1.0f);
             }
             else
             {
                 MiddleBossSprite.flipX = false;
+                Instantiate(swordSlashEffect, rightShootTf.position, Quaternion.identity, gameObject.transform);
+                yield return new WaitForSeconds(1.0f);
             }
-            yield return null;
         } while (!isNewState);
         middleBossAnimator.SetBool("isStab", false);
     }

@@ -19,9 +19,9 @@ public class Player : MonoBehaviour
     private bool isCrouch = false;
     private float jumpPower = 6.0f;
     [HideInInspector]
-    public int playerHP = 5;
+    public int playerHP = 10;
     [HideInInspector]
-    public int playerHPMax = 5;
+    public int playerHPMax = 10;
     [SerializeField]
     private GameObject[] bullet;
     [SerializeField]
