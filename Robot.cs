@@ -4,35 +4,25 @@ using UnityEngine;
 
 public class Robot : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject bullet;
+    [SerializeField]
+    private Transform leftBulletTf;
+    [SerializeField]
+    private Transform rightBulletTf;
     private GameObject player;
     private Animator robotAnimator;
     private SpriteRenderer robotSprite;
     private Rigidbody2D robotRigid;
-    private int robotHP = 30;
+    [HideInInspector]
+    public int RobotHP = 20;
     private bool isNewState = false;
     private Vector3 velocity = Vector3.zero;
     private float speed = 1.5f;
-    private float jumpPower = 5.0f;
+    private float jumpPower = 6.0f;
     private bool isFind = false;
+    [HideInInspector]
     public bool isJumping = false;
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Bullet")
-        {
-            if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
-            {
-                robotHP--;
-            }
-            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
-            {
-                robotHP -= 2;
-            }
-            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.FlameShot)
-            {
-                robotHP -= 3;
-            }
-        }
-    }
     public enum RobotState
     {
         Idle,
@@ -59,6 +49,10 @@ public class Robot : MonoBehaviour
         {
             isFind = true;
             SetState(RobotState.Trace);
+        }
+        if(RobotHP <= 0)
+        {
+            SetState(RobotState.Die);
         }
 	}
     public void SetState(RobotState newState)
@@ -113,7 +107,7 @@ public class Robot : MonoBehaviour
                 isJumping = true;
                 SetState(RobotState.Trace);
             }
-            yield return null;
+            yield return new WaitForSeconds(0.1f);
         } while (!isNewState);
         isJumping = false;
     }
@@ -128,9 +122,25 @@ public class Robot : MonoBehaviour
     }
     IEnumerator Die()
     {
+        robotAnimator.SetBool("isDie", true);
         do
         {
             yield return null;
         } while (!isNewState);
+    }
+    public void RobotShoot() //Shoot 애니메이션 이벤트용
+    {
+        if (robotSprite.flipX == true)
+        {
+            Instantiate(bullet, leftBulletTf.position, Quaternion.identity, gameObject.transform);
+        }
+        else
+        {
+            Instantiate(bullet, rightBulletTf.position, Quaternion.identity, gameObject.transform);
+        }
+    }
+    public void DestroySelf()
+    {
+        Destroy(gameObject);
     }
 }
