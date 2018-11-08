@@ -60,6 +60,10 @@ public class Player : MonoBehaviour
         {
             playerAnimator.SetBool("isDie", true);
         }
+        if(transform.position.y < -7.0f)
+        {
+            GoToDeathScene();
+        }
 	}
 
     private void OnCollisionEnter2D(Collision2D collision)

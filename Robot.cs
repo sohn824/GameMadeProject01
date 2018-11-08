@@ -15,7 +15,7 @@ public class Robot : MonoBehaviour
     private SpriteRenderer robotSprite;
     private Rigidbody2D robotRigid;
     [HideInInspector]
-    public int RobotHP = 20;
+    public int RobotHP = 10;
     private bool isNewState = false;
     private Vector3 velocity = Vector3.zero;
     private float speed = 1.5f;

@@ -29,6 +29,17 @@ public class Bullet : MonoBehaviour
                 //나오자마자 애니메이션 재생되기 때문에 할 거 없음
             }
         }
+        if(collision.tag == "Ground")
+        {
+            if(player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
+            {
+                Destroy(gameObject);
+            }
+            else if(player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
+            {
+                explosion();
+            }
+        }
     }
     // Use this for initialization
     void Start ()
