@@ -8,7 +8,15 @@ public class SwordSlash : MonoBehaviour
     private SpriteRenderer middleBossSprite;
     private Vector3 moveVelocity;
     private float speed = 4.0f;
-    // Use this for initialization
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "Ground")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Start ()
     {
         Invoke("DestroySelf", 2.5f);
@@ -26,7 +34,6 @@ public class SwordSlash : MonoBehaviour
         }
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         transform.position += moveVelocity * speed * Time.deltaTime;

@@ -145,7 +145,7 @@ public class MiddleBoss : MonoBehaviour
         middleBossAnimator.SetBool("isCharge", false);
     }
 
-    IEnumerator Shoot()
+    IEnumerator Shoot() //안쓰는 동작
     {
         middleBossAnimator.SetBool("isShoot", true);
         do
@@ -163,7 +163,7 @@ public class MiddleBoss : MonoBehaviour
         middleBossAnimator.SetBool("isShoot", false);
     }
 
-    IEnumerator Smash()
+    IEnumerator Smash() //안쓰는 동작
     {
         middleBossAnimator.SetBool("isSmash", true);
         do
@@ -198,13 +198,13 @@ public class MiddleBoss : MonoBehaviour
             if (targetTf.position.x < transform.position.x)
             {
                 MiddleBossSprite.flipX = true;
-                Instantiate(swordSlashEffect, leftShootTf.position, Quaternion.identity, gameObject.transform);
+                Instantiate(swordSlashEffect, new Vector3(leftShootTf.position.x, leftShootTf.position.y +0.45f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
                 yield return new WaitForSeconds(1.0f);
             }
             else
             {
                 MiddleBossSprite.flipX = false;
-                Instantiate(swordSlashEffect, rightShootTf.position, Quaternion.identity, gameObject.transform);
+                Instantiate(swordSlashEffect, new Vector3(rightShootTf.position.x, rightShootTf.position.y +0.45f, rightShootTf.position.z), Quaternion.identity, gameObject.transform);
                 yield return new WaitForSeconds(1.0f);
             }
         } while (!isNewState);
@@ -256,7 +256,7 @@ public class MiddleBoss : MonoBehaviour
     {
         while (true)
         {
-            currentSeed = Random.Range(0, 3); //반환값에 max 미포함
+            currentSeed = Random.Range(0, 2); //반환값에 max 미포함
             if(currentSeed != beforeSeed)
             {
                 break;
@@ -288,16 +288,16 @@ public class MiddleBoss : MonoBehaviour
                     Instantiate(enemyLazer[1], new Vector3(rightShootTf.position.x, leftShootTf.position.y - 1.5f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
                 }
                 break;
-            case 2:
-                if (targetTf.position.x < transform.position.x)
-                {
-                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x - 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
-                }
-                else
-                {
-                    Instantiate(enemyBomb, new Vector3(leftShootTf.position.x + 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
-                }
-                break;
+            //case 2:
+            //    if (targetTf.position.x < transform.position.x)
+            //    {
+            //        Instantiate(enemyBomb, new Vector3(leftShootTf.position.x - 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
+            //    }
+            //    else
+            //    {
+            //        Instantiate(enemyBomb, new Vector3(leftShootTf.position.x + 1.0f, leftShootTf.position.y - 0.6f, leftShootTf.position.z), Quaternion.identity);
+            //    }
+            //    break;
         }
         beforeSeed = currentSeed;
 

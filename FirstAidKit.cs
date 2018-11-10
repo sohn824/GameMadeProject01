@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FirstAidKit : MonoBehaviour
 {
@@ -9,6 +10,10 @@ public class FirstAidKit : MonoBehaviour
 	void Start ()
     {
         player = GameObject.Find("Player");
+        if(SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            Destroy(gameObject);
+        }
 	}
 
     private void OnTriggerEnter2D(Collider2D collision)

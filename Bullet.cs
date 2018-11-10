@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
         {
             if(player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
             {
-                Destroy(gameObject);
+                Invoke("DestroySelf", 0.1f);
             }
             else if(player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
             {

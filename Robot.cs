@@ -50,9 +50,19 @@ public class Robot : MonoBehaviour
             isFind = true;
             SetState(RobotState.Trace);
         }
+        if(Mathf.Abs(transform.position.x - player.transform.position.x) < 0.15f) //x좌표가 겹치면 멈추게 하기 (y축이 다른데 위에서 겹치는경우)
+        {
+            isFind = false;
+            SetState(RobotState.Idle);
+        }
         if(RobotHP <= 0)
         {
             SetState(RobotState.Die);
+        }
+        if(transform.position.y < -2.0f)
+        {
+            isJumping = true;
+            SetState(RobotState.Jump);
         }
 	}
     public void SetState(RobotState newState)

@@ -51,7 +51,7 @@ public class MiddleBossSight : MonoBehaviour
         {
             while (true)
             {
-                currentSeed = Random.Range(1, 5);
+                currentSeed = Random.Range(1, 3);//Shoot, Smash 상태 만들었다가 제외 상태
                 if (currentSeed != beforeSeed)
                 {
                     break;
@@ -68,13 +68,13 @@ public class MiddleBossSight : MonoBehaviour
                 gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Charge);
                 break;
             case 2:
-                gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Shoot);
+                gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Stab);
                 break;
             case 3:
                 gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Smash);
                 break;
             case 4:
-                gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Stab);
+                gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Shoot);
                 break;
             case 5:
                 gameObject.transform.parent.GetComponent<MiddleBoss>().SetState(MiddleBoss.MiddleBossState.Gathering);

@@ -5,6 +5,8 @@ using UnityEngine;
 public class Mummy : MonoBehaviour
 {
     [SerializeField]
+    private GameObject itemChest;
+    [SerializeField]
     private GameObject AttackEffect;
     [SerializeField]
     private Transform leftAttackTf;
@@ -158,6 +160,7 @@ public class Mummy : MonoBehaviour
     public void DestroySelf() //죽는 애니메이션 이벤트용
     {
         ScoreManager.instance.AddScore(500);
+        Instantiate(itemChest, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), Quaternion.identity);
         Destroy(gameObject);
     }
 

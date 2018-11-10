@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FlameShot : MonoBehaviour
 {
@@ -18,5 +19,9 @@ public class FlameShot : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player");
+        if (SceneManager.GetActiveScene().buildIndex != 1)
+        {
+            Destroy(gameObject);
+        }
     }
 }
