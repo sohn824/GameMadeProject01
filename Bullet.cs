@@ -58,7 +58,7 @@ public class Bullet : MonoBehaviour
             moveVelocity = Vector3.right;
             bulletSprite.flipX = false;
         }
-        Invoke("DestroySelf", 2.5f);
+        Invoke("DestroySelf", 1.5f);
 	}
 	
 	// Update is called once per frame

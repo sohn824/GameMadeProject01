@@ -9,14 +9,6 @@ public class SwordSlash : MonoBehaviour
     private Vector3 moveVelocity;
     private float speed = 4.0f;
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.tag == "Ground")
-        {
-            Destroy(gameObject);
-        }
-    }
-
     void Start ()
     {
         Invoke("DestroySelf", 2.5f);

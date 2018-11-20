@@ -19,6 +19,7 @@ public class BulletManager : MonoBehaviour
         {
             instance = this; //다른 곳에서도 쉽게 호출할 수 있도록
         }
+
     }
     void Start()
     {

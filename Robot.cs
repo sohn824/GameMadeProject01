@@ -5,6 +5,8 @@ using UnityEngine;
 public class Robot : MonoBehaviour
 {
     [SerializeField]
+    private GameObject rocketLauncher;
+    [SerializeField]
     private GameObject bullet;
     [SerializeField]
     private Transform leftBulletTf;
@@ -152,5 +154,7 @@ public class Robot : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(gameObject);
+        ScoreManager.instance.AddScore(2000);
+        Instantiate(rocketLauncher, new Vector3(transform.position.x, transform.position.y - 0.3f, transform.position.z), Quaternion.identity);
     }
 }

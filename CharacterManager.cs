@@ -7,8 +7,9 @@ public class CharacterManager : MonoBehaviour
 {
     Player player;
     Slider hpBar;
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start ()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
         hpBar = GameObject.Find("HPBar").GetComponent<Slider>();

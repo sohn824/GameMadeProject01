@@ -42,8 +42,9 @@ public class Player : MonoBehaviour
 
     public CurrentBullet currentBullet;
 
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start ()
     {
         playerSprite = GetComponent<SpriteRenderer>();
         playerRigid = GetComponent<Rigidbody2D>();
