@@ -10,6 +10,14 @@ public class MeltMonsterSight : MonoBehaviour
         if(collision.tag == "Player")
         {
             meltMonsterAnimator.enabled = true;
+            transform.parent.GetComponent<MeltMonster>().SetState(MeltMonster.MeltMonsterState.Attack);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            transform.parent.GetComponent<MeltMonster>().SetState(MeltMonster.MeltMonsterState.Idle);
         }
     }
     // Use this for initialization

@@ -8,8 +8,11 @@ public class MeltMonster : MonoBehaviour
     private Transform leftSpawnTf;
     [SerializeField]
     private Transform rightSpawnTf;
+    [SerializeField]
+    private GameObject dirtyBubble;
     GameObject player;
     Animator meltMonsterAnimator;
+    SpriteRenderer meltMonsterSprite;
     private bool isNewState = false;
     public enum MeltMonsterState
     {
@@ -30,11 +33,19 @@ public class MeltMonster : MonoBehaviour
     void Start ()
     {
         meltMonsterAnimator = GetComponent<Animator>();
+        meltMonsterSprite = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
 	}
 	void Update ()
     {
-		
+		if(transform.position.x < player.transform.position.x)
+        {
+            meltMonsterSprite.flipX = true;
+        }
+        else
+        {
+            meltMonsterSprite.flipX = false;
+        }
 	}
     IEnumerator FSMMain()
     {
@@ -57,11 +68,10 @@ public class MeltMonster : MonoBehaviour
     }
     IEnumerator Attack()
     {
-        meltMonsterAnimator.SetBool("isAttack", true);
+        meltMonsterAnimator.SetBool("isAttack", true); //Animation Event로 공격
         do
         {
-
-            yield return new WaitForSeconds(1.0f);
+            yield return null;
             if (isNewState)
             {
                 break;
@@ -81,4 +91,15 @@ public class MeltMonster : MonoBehaviour
         } while (!isNewState);
     }
 
+    public void MeltMonsterAttack()
+    {
+        if (player.transform.position.x < transform.position.x)
+        {
+            Instantiate(dirtyBubble, leftSpawnTf.position, Quaternion.identity, gameObject.transform);
+        }
+        else
+        {
+            Instantiate(dirtyBubble, rightSpawnTf.position, Quaternion.identity, gameObject.transform);
+        }
+    }
 }
