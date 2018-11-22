@@ -10,7 +10,6 @@ public class Bullet : MonoBehaviour
     private SpriteRenderer bulletSprite;
     private Vector3 moveVelocity;
     private float speed = 8.0f;
-    private bool isExplosion = false;
     GameObject player;
 
     private void OnTriggerEnter2D(Collider2D collision)

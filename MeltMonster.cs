@@ -16,6 +16,7 @@ public class MeltMonster : MonoBehaviour
     private bool isNewState = false;
     private int currentLife = 10; //extraLife 하나당 체력
     private int extraLife = 3; //이게 0이되면 완전히 죽음
+    private bool isLeft = true;
     public enum MeltMonsterState
     {
         Idle,
@@ -67,7 +68,7 @@ public class MeltMonster : MonoBehaviour
         {
             meltMonsterSprite.flipX = false;
         }
-        if(currentLife <= 0)
+        if (currentLife <= 0)
         {
             SetState(MeltMonsterState.Die);
         }
@@ -132,6 +133,24 @@ public class MeltMonster : MonoBehaviour
 
     public void MeltMonsterDie() //Die Animation Event
     {
-
+        extraLife--;
+        if(extraLife > 0 && isLeft)
+        {
+            currentLife = 10;
+            transform.Translate(new Vector3(12.5f, 0f, 0f));
+            isLeft = false;
+            meltMonsterAnimator.SetBool("isDie", false);
+        }
+        else if(extraLife > 0 && !isLeft)
+        {
+            currentLife = 10;
+            transform.Translate(new Vector3(-12.5f, 0f, 0f));
+            isLeft = true;
+            meltMonsterAnimator.SetBool("isDie", false);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }
