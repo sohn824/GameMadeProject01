@@ -41,7 +41,7 @@ public class DirtyBubble : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        transform.position += direction * 2.0f * Time.deltaTime;
+        transform.position += direction * 4.0f * Time.deltaTime;
     }
 
     public void DestroySelf() //Pop 애니메이션 이벤트 용

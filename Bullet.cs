@@ -5,10 +5,12 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private Animator bulletAnimator;
+    private BoxCollider2D bulletCollider;
     private SpriteRenderer playerSprite;
     private SpriteRenderer bulletSprite;
     private Vector3 moveVelocity;
     private float speed = 8.0f;
+    private bool isExplosion = false;
     GameObject player;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -48,6 +50,7 @@ public class Bullet : MonoBehaviour
         playerSprite = player.GetComponent<SpriteRenderer>();
         bulletSprite = GetComponent<SpriteRenderer>();
         bulletAnimator = GetComponent<Animator>();
+        bulletCollider = GetComponent<BoxCollider2D>();
         if (playerSprite.flipX == false)
         {
             moveVelocity = Vector3.left;
@@ -70,6 +73,11 @@ public class Bullet : MonoBehaviour
     void explosion()
     {
         bulletAnimator.SetBool("isExplosion", true);
+    }
+
+    public void SetExplosionCollider()
+    {
+        bulletCollider.size = new Vector2(4, 3);
     }
 
     public void DestroySelf() //Bullet들의 애니메이션 이벤트로도 사용

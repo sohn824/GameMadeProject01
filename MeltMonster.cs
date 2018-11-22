@@ -14,6 +14,8 @@ public class MeltMonster : MonoBehaviour
     Animator meltMonsterAnimator;
     SpriteRenderer meltMonsterSprite;
     private bool isNewState = false;
+    private int currentLife = 10; //extraLife 하나당 체력
+    private int extraLife = 3; //이게 0이되면 완전히 죽음
     public enum MeltMonsterState
     {
         Idle,
@@ -21,6 +23,25 @@ public class MeltMonster : MonoBehaviour
         Die
     }
     public MeltMonsterState meltMonsterState;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Bullet")
+        {
+            if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.Default)
+            {
+                currentLife--;
+            }
+            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.RocketLauncher)
+            {
+                currentLife -= 2;
+            }
+            else if (player.GetComponent<Player>().currentBullet == Player.CurrentBullet.FlameShot)
+            {
+                currentLife -= 3;
+            }
+            Debug.Log(currentLife);
+        }
+    }
     private void OnEnable()
     {
         StartCoroutine("FSMMain");
@@ -45,6 +66,10 @@ public class MeltMonster : MonoBehaviour
         else
         {
             meltMonsterSprite.flipX = false;
+        }
+        if(currentLife <= 0)
+        {
+            SetState(MeltMonsterState.Die);
         }
 	}
     IEnumerator FSMMain()
@@ -81,6 +106,7 @@ public class MeltMonster : MonoBehaviour
     }
     IEnumerator Die()
     {
+        meltMonsterAnimator.SetBool("isDie", true);
         do
         {
             yield return null;
@@ -89,9 +115,10 @@ public class MeltMonster : MonoBehaviour
                 break;
             }
         } while (!isNewState);
+        meltMonsterAnimator.SetBool("isDie", false);
     }
 
-    public void MeltMonsterAttack()
+    public void MeltMonsterAttack() //Attack Animation Event
     {
         if (player.transform.position.x < transform.position.x)
         {
@@ -101,5 +128,10 @@ public class MeltMonster : MonoBehaviour
         {
             Instantiate(dirtyBubble, rightSpawnTf.position, Quaternion.identity, gameObject.transform);
         }
+    }
+
+    public void MeltMonsterDie() //Die Animation Event
+    {
+
     }
 }
