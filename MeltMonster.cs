@@ -10,6 +10,7 @@ public class MeltMonster : MonoBehaviour
     private Transform rightSpawnTf;
     [SerializeField]
     private GameObject dirtyBubble;
+    private GameObject rockForMelt;
     GameObject player;
     Animator meltMonsterAnimator;
     SpriteRenderer meltMonsterSprite;
@@ -57,6 +58,7 @@ public class MeltMonster : MonoBehaviour
         meltMonsterAnimator = GetComponent<Animator>();
         meltMonsterSprite = GetComponent<SpriteRenderer>();
         player = GameObject.Find("Player");
+        rockForMelt = GameObject.Find("RockForMelt");
 	}
 	void Update ()
     {
@@ -137,19 +139,20 @@ public class MeltMonster : MonoBehaviour
         if(extraLife > 0 && isLeft)
         {
             currentLife = 10;
-            transform.Translate(new Vector3(12.5f, 0f, 0f));
+            transform.Translate(new Vector3(10.0f, 0f, 0f));
             isLeft = false;
             meltMonsterAnimator.SetBool("isDie", false);
         }
         else if(extraLife > 0 && !isLeft)
         {
             currentLife = 10;
-            transform.Translate(new Vector3(-12.5f, 0f, 0f));
+            transform.Translate(new Vector3(-10.0f, 0f, 0f));
             isLeft = true;
             meltMonsterAnimator.SetBool("isDie", false);
         }
         else
         {
+            rockForMelt.GetComponent<Rock>().Flag = true; //몬스터 죽으면 문열기
             Destroy(gameObject);
         }
     }
