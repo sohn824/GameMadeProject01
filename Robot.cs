@@ -47,7 +47,7 @@ public class Robot : MonoBehaviour
 	}	
 	void Update ()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) < 30 && isFind == false)
+        if (Vector3.Distance(transform.position, player.transform.position) < 18 && isFind == false)
         {
             isFind = true;
             SetState(RobotState.Trace);
