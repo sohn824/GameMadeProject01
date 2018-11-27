@@ -13,7 +13,7 @@ public class SwordSlash : MonoBehaviour
     {
         Invoke("DestroySelf", 2.5f);
         swordSlashSprite = GetComponent<SpriteRenderer>();
-        middleBossSprite = gameObject.transform.parent.GetComponent<SpriteRenderer>();
+        middleBossSprite = GameObject.Find("MiddleBoss").GetComponent<SpriteRenderer>();
         if(middleBossSprite.flipX == true)
         {
             swordSlashSprite.flipX = true;

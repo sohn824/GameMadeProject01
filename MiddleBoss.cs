@@ -32,9 +32,9 @@ public class MiddleBoss : MonoBehaviour
     private bool isNotAngry = true; //이건 광폭화 진입 시 한번만 호출되게 하기용
     public Vector3 Velocity;
     [HideInInspector]
-    public int MiddleBossHP = 50;
+    public int MiddleBossHP = 30;
     [HideInInspector]
-    public int MiddleBossHPMax = 50;
+    public int MiddleBossHPMax = 30;
     int beforeSeed = -1;
     int currentSeed = 0;
     private void OnTriggerExit2D(Collider2D collision)
@@ -94,7 +94,7 @@ public class MiddleBoss : MonoBehaviour
                 Velocity = Vector3.right;
             }
         }
-        if(MiddleBossHP <= 25 && isNotAngry)
+        if(MiddleBossHP <= 20 && isNotAngry)
         {
             SetState(MiddleBossState.Gathering);
             isNotAngry = false;
@@ -198,13 +198,13 @@ public class MiddleBoss : MonoBehaviour
             if (targetTf.position.x < transform.position.x)
             {
                 MiddleBossSprite.flipX = true;
-                Instantiate(swordSlashEffect, new Vector3(leftShootTf.position.x, leftShootTf.position.y +0.45f, leftShootTf.position.z), Quaternion.identity, gameObject.transform);
+                Instantiate(swordSlashEffect, new Vector3(leftShootTf.position.x, leftShootTf.position.y - 0.1f, leftShootTf.position.z), Quaternion.identity);
                 yield return new WaitForSeconds(1.0f);
             }
             else
             {
                 MiddleBossSprite.flipX = false;
-                Instantiate(swordSlashEffect, new Vector3(rightShootTf.position.x, rightShootTf.position.y +0.45f, rightShootTf.position.z), Quaternion.identity, gameObject.transform);
+                Instantiate(swordSlashEffect, new Vector3(rightShootTf.position.x, rightShootTf.position.y - 0.1f, rightShootTf.position.z), Quaternion.identity);
                 yield return new WaitForSeconds(1.0f);
             }
         } while (!isNewState);
